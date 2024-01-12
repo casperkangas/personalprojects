@@ -27,16 +27,21 @@ The app logs user actions and errors, creating a separate log file for each run,
 Usage Instructions:
 
 1. Registration:
-   Choose the "Register" option. Enter a unique username and a secure password.
+   Choose the "Register" option.
+   Enter a unique username and a secure password.
 2. Login:
-   Choose the "Login" option. Enter your username and password.
+   Choose the "Login" option.
+   Enter your username and password.
 3. Create a Note:
-   After logging in, select "Create a note." Enter the title and content of the note.
+   After logging in, select "Create a note."
+   Enter the title and content of the note.
 4. List and Read Notes:
-   Choose "List all notes" to see your notes. Select "Read a note" to view the content of a specific note.
+   Choose "List all notes" to see your notes.
+   Select "Read a note" to view the content of a specific note.
 5. Delete a Note:
    Select "Delete a note" to remove a specific note.
 6. Admin Features:
-   Admin login requires a separate password. Once logged in as admin, choose from available admin actions.
+   Admin login requires a separate password.
+   Once logged in as admin, choose from available admin actions.
 7. Logging:
    Each run generates a new log file in the "logs" folder, providing a record of user actions and errors.
