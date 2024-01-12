@@ -1,0 +1,7 @@
+2024-01-12 14:28:50,413 - INFO: User 'casper' registered successfully.
+2024-01-12 14:28:50,413 - INFO: User 'casper' registered successfully.
+2024-01-12 14:29:00,949 - INFO: User 'casper' logged in successfully.
+2024-01-12 14:29:15,077 - INFO: Note created by 'casper': helloworld
+2024-01-12 14:29:19,834 - INFO: User 'casper' logged out.
+2024-01-12 14:29:28,616 - INFO: Admin 'admin' read notes for all users.
+2024-01-12 14:29:35,915 - INFO: Program exited.

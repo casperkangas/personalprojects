@@ -1,0 +1,9 @@
+2024-01-12 14:33:22,997 - INFO: User 'casper' logged in successfully.
+2024-01-12 14:33:28,117 - INFO: Note 'helloworld.txt' read by 'casper'.
+2024-01-12 14:33:46,364 - INFO: Note created by 'casper': helloworld
+2024-01-12 14:33:56,204 - INFO: Note created by 'casper': hellome
+2024-01-12 14:34:04,552 - INFO: Note 'helloworld.txt' read by 'casper'.
+2024-01-12 14:34:14,140 - INFO: Note 'hellome.txt' deleted by 'casper'.
+2024-01-12 14:34:19,226 - INFO: User 'casper' logged out.
+2024-01-12 14:34:24,350 - INFO: Admin 'admin' read notes for all users.
+2024-01-12 14:34:34,966 - INFO: Program exited.

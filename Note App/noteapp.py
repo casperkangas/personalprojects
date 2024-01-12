@@ -3,16 +3,28 @@ import datetime
 import logging
 import hashlib
 
-LOGS_FOLDER = "logs"
-NOTES_FOLDER = "notes"
-USERS_FILE = "users.txt"
+SCRIPT_DIR = os.path.dirname(__file__)
+LOGS_FOLDER = os.path.join(SCRIPT_DIR, "logs")
+NOTES_FOLDER = os.path.join(SCRIPT_DIR, "notes")
+USERS_FILE = os.path.join(SCRIPT_DIR, "users.txt")
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "verystrongpassword"
 
-current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-LOG_FILE = os.path.join(LOGS_FOLDER, f"{current_date}.log")
+# Ensure the logs, notes, and users folders exist
+os.makedirs(LOGS_FOLDER, exist_ok=True)
+os.makedirs(NOTES_FOLDER, exist_ok=True)
 
-logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s - %(levelname)s: %(message)s')
+# Get the current date and time for the log file name
+current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+LOG_FILE = os.path.join(LOGS_FOLDER, f"note_app_log_{current_datetime}.log")
+
+# Configure the logger
+try:
+    logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s - %(levelname)s: %(message)s')
+except FileNotFoundError:
+    # If there's an issue with the log file path, print an error message
+    print(f"Error: Unable to create log file at '{LOG_FILE}'. Please check the path.")
+    raise  # Raise the exception to terminate the program
 
 def register_user(username, password):
     try:
@@ -20,7 +32,7 @@ def register_user(username, password):
 
         # Check if the username is already taken
         if os.path.exists(user_folder):
-            print("Username already taken. Please choose another username.\n")
+            print("\nUsername already taken. Please choose another username.")
             return
 
         # Create a folder for the user within the "notes" directory
@@ -30,6 +42,7 @@ def register_user(username, password):
         with open(USERS_FILE, 'a') as file:
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
             file.write(f"{username}:{hashed_password}\n")
+            print("\nUser registered successfully.")
 
         logging.info(f"User '{username}' registered successfully.")
     except Exception as e:
@@ -55,46 +68,64 @@ def login():
                         logging.info(f"User '{username}' logged in successfully.")
                         return username
 
-            print("Invalid username or password. Please try again.")
+                # Inform the user if the login was unsuccessful
+                print("\nInvalid username or password. Please try again.")
+                return None
     except Exception as e:
         logging.error(f"Error during login: {str(e)}")
         return None
 
-def admin_actions():
-    print("Admin Actions:")
-    print("1. Read Notes (for all users)")
-    print("2. Delete Notes (for all users)")
-
 def admin_read_notes():
     try:
+        notes_exist = False  # Flag to check if any notes exist
+
         print("\nReading Notes for All Users:")
+
         for user_folder in os.listdir(NOTES_FOLDER):
             user_path = os.path.join(NOTES_FOLDER, user_folder)
+
             if os.path.isdir(user_path):
-                print(f"\n--- Notes for User: {user_folder} ---")
                 for note in os.listdir(user_path):
                     note_path = os.path.join(user_path, note)
+
                     with open(note_path, 'r') as file:
                         note_content = file.read()
+
                     print(f"\n----- {note} -----\n")
                     print(note_content)
-                    print("\n----- End of Note -----\n")
+                    print("\n----- End of Note -----")
+
+                    notes_exist = True  # Set the flag since at least one note is found
+
+        if not notes_exist:
+            print("\nNo notes found for any user.")
+
         logging.info(f"Admin '{ADMIN_USERNAME}' read notes for all users.")
     except Exception as e:
         logging.error(f"Error reading notes for all users: {str(e)}")
 
 def admin_delete_notes():
     try:
-        print("\nDeleting Notes for All Users:\n")
+        notes_exist = False  # Flag to check if any notes exist
+
+        print("\nDeleting Notes for All Users:")
+
         for user_folder in os.listdir(NOTES_FOLDER):
             user_path = os.path.join(NOTES_FOLDER, user_folder)
+            
             if os.path.isdir(user_path):
                 for note in os.listdir(user_path):
                     note_path = os.path.join(user_path, note)
                     os.remove(note_path)
                     logging.info(f"Note '{note}' deleted by Admin '{ADMIN_USERNAME}'.")
-                    print(f"Note '{note}' deleted successfully.")
-        print("\nAll notes deleted.")
+                    print(f"\nNote '{note}' deleted successfully.")
+                    
+                    notes_exist = True  # Set the flag since at least one note is deleted
+
+        if notes_exist:
+            print("\nAll notes deleted.")
+        elif not notes_exist:
+            print("\nNo notes found for any user. Nothing to delete.")
     except Exception as e:
         logging.error(f"Error deleting notes for all users: {str(e)}")
 
@@ -109,6 +140,7 @@ def create_note(username):
             filename = os.path.join(user_folder, f"{title}.txt")
 
             with open(filename, 'w') as file:
+                file.write(f"Author: {username}\n")
                 file.write(f"Date: {timestamp}\n\n")
                 file.write(content)
 
@@ -229,8 +261,7 @@ try:
         elif action == '3':
             admin_password = input("\nEnter admin password: ")
             if admin_password == ADMIN_PASSWORD:
-                admin_actions()
-                admin_action = input("\nEnter admin action: ")
+                admin_action = input("\nChoose an Admin Action:\n1. Read Notes (for all users)\n2. Delete Notes (for all users)\n> ")
                 if admin_action == '1':
                     admin_read_notes()
                 elif admin_action == '2':

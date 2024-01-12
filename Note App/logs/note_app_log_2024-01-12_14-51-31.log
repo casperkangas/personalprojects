@@ -1,0 +1,4 @@
+2024-01-12 14:51:44,537 - INFO: Admin 'admin' read notes for all users.
+2024-01-12 14:51:56,060 - INFO: Note 'helloworld.txt' deleted by Admin 'admin'.
+2024-01-12 14:51:56,060 - INFO: Note 'worldhello.txt' deleted by Admin 'admin'.
+2024-01-12 14:52:00,952 - INFO: Program exited.
